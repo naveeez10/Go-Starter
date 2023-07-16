@@ -1,10 +1,10 @@
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1 style = "color: red">This is the About Page!</h1>
-</body>
-</html>
+{{template "base" .}}
+{{define "content"}}
+<div class = "container">
+    <div class = "row">
+        <div class = "col">
+            <h1 style = "color: red">This is the About Page!</h1>
+        </div>
+    </div>
+</div>
+{{end}}
