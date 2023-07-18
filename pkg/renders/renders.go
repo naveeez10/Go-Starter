@@ -3,6 +3,7 @@ package renders
 import (
 	"bytes"
 	"fmt"
+	"hello/pkg/config"
 	"html/template"
 	"log"
 	"net/http"
@@ -11,18 +12,21 @@ import (
 
 var functions = template.FuncMap{}
 
+var app *config.AppConfig
+
+func NewTemplates(a *config.AppConfig) {
+	app = a
+}
+
 func RenderTemplate(w http.ResponseWriter, temp string) error {
-	tc, err := CreateTemplateCache()
-	if err != nil {
-		log.Fatal(err)
-	}
+	tc := app.TemplateCache
 	t, ok := tc[temp]
 	if !ok {
-		log.Fatal(err)
+		log.Fatal("Couldn't find a relevant template")
 	}
 	buf := new(bytes.Buffer)
 	_ = t.Execute(buf, nil)
-	_, err = buf.WriteTo(w)
+	_, err := buf.WriteTo(w)
 	if err != nil {
 		fmt.Println("Error writing the template to the browser", err)
 	}
@@ -42,6 +46,7 @@ func CreateTemplateCache() (map[string]*template.Template, error) {
 			return myCache, err
 		}
 		matches, err := filepath.Glob("./templates/*.layout.html")
+
 		if err != nil {
 			return myCache, err
 		}
